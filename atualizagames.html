@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Gameflix</title>
+
+  <!-- CSS  -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="static/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="static/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+</head>
+<body>
+  <nav class="white" role="navigation">
+    <div class="nav-wrapper container">
+      <a id="logo-container" href="#" class="brand-logo">Gameflix</a>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="http://localhost:5000/adicionar">Adicionar jogos</a></li>
+      </ul>
+
+      <ul id="nav-mobile" class="sidenav">
+        <li><a href="http://localhost:5000/adicionar">Adicionar jogos</a></li>
+      </ul>
+      <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+    </div>
+  </nav>
+
+  <div id="index-banner" class="parallax-container">
+    <div class="section no-pad-bot">
+      <div class="container">
+        <br><br>
+        <h1 class="header center teal-text text-lighten-2">Gameflix</h1>
+        <div class="row center">
+          <h5 class="header col s12 light">Aluguel de videogames no PS4  e PS4</h5>
+        </div>
+        <div class="row center">
+          <a href="http://materializecss.com/getting-started.html" id="download-button" class="btn-large waves-effect waves-light teal lighten-1">Get Started</a>
+        </div>
+        <br><br>
+
+      </div>
+    </div>
+    <div class="parallax"><img src="static/ps5games1.png" alt="Unsplashed background img 1"></div>
+  </div>
+
+
+  <div class="container">
+    <style>
+      button.btn {
+        margin: 5px;
+      }
+      </style>
+    <div class="section" id="section">
+      <script>
+        function criarDiv(imagem, nome, descricao, versao, disponivel) {
+        // criar um elemento div
+        var div = $("<div></div>");
+        // adicionar a classe card do Materialize
+        div.addClass("card");
+        // definir o estilo display como flex
+        div.attr("style", "display: flex; align-items: center");
+        // criar um elemento img
+        var img = $("<img>");
+        // definir o atributo src com a imagem
+        img.attr("src", imagem);
+        // definir o atributo width com 200
+        img.attr("width", 100);
+        // definir o atributo height com 400
+        img.attr("height", 200);
+        // criar uma div para a imagem
+        var imgDiv = $("<div></div>");
+        // adicionar a classe card-image do Materialize
+        imgDiv.addClass("card-image");
+        // anexar a imagem à div da imagem
+        imgDiv.append(img);
+        
+        // criar um elemento form com o id nome
+        var form = $("<form id=\""+nome+"\"></form>");
+        
+        // criar um elemento label para o nome
+        var label1 = $("<label for=\"nome\">Nome:</label>");
+        
+        // criar um elemento input para o nome
+        var input1 = $("<input type=\"text\" id=\"nome\" name=\"nome\" value=\""+nome+"\"  >");
+
+        // criar um elemento label para o nome
+        var label2 = $("<label for=\"descricao\">Descricao:</label>");
+        
+        // criar um elemento input para o nome
+        var input2 = $("<input type=\"text\" id=\"descricao\" name=\"descricao\" value=\""+descricao+"\"  >");
+
+        // criar um elemento label para o nome
+         var label3 = $("<label for=\"versao\">Versão:</label>");
+        
+        // criar um elemento input para o nome
+        var input3 = $("<input type=\"text\" id=\"versao\" name=\"versao\" value=\""+versao+"\"  >");
+
+        // criar um elemento label para o nome
+         var label4 = $("<label for=\"disponivel\">Disponibilidade:</label>");
+        
+        // criar um elemento input para o nome
+        var input4 = $("<input type=\"text\" id=\"disponivel\" name=\"disponivel\" value=\""+disponivel+"\"  >");
+
+        var botao1 = $("<button type=\"button\" class=\"btn\" onclick=\"atualizar('"+nome+"')\">Atualizar jogo</button>");
+        
+        var botao2 = $("<button type=\"button\" class=\"btn\" onclick=\"deletar('"+nome+"')\">Deletar jogo</button>");
+        // anexar os elementos ao form
+        form.append(label1);
+        form.append(input1);
+        form.append(label2);
+        form.append(input2);
+        form.append(label3);
+        form.append(input3);
+        form.append(label4);
+        form.append(input4);
+        form.append(botao1);
+        form.append(botao2);
+
+        // criar uma div para o form
+        var formDiv = $("<div></div>");
+        // adicionar a classe card-content do Materialize
+        formDiv.addClass("card-content");
+        // anexar o form à div do form
+        formDiv.append(form);
+        // anexar as divs filhas à div principal
+        div.append(imgDiv);
+        div.append(formDiv);
+        // retornar a div criada
+        return div;
+      }
+
+        // função para ler o JSON e criar as divs
+        function lerJSON(url) {
+          // usar o método getJSON do jQuery
+          $.getJSON(url, function(data) {
+            // iterar sobre os dados recebidos
+            $.each(data, function(index, item) {
+              // extrair a imagem e o nome de cada item
+              var imagem = item.imagem;
+              var nome = item.nome;
+              var descricao = item.descricao;
+              var versao = item.versao;
+              var disponivel = item.disponivel;
+              
+              console.log(nome);
+              // criar uma div com a imagem e o nome
+              var div = criarDiv(imagem, nome, descricao, versao, disponivel);
+              // anexar a div ao elemento com id #container
+              $("#section").append(div);
+            });
+          });
+        }
+        // chamar a função lerJSON com a url desejada
+        lerJSON("http://localhost:5000/lerjogos");
+
+        function atualizar(id){
+         // Obtém o formulário pelo id
+          var formulario = document.getElementById(id);
+
+          // Obtém os campos pelo nome
+          var nome = formulario.elements["nome"].value;
+          var descricao = formulario.elements["descricao"].value;
+          var versao = formulario.elements["versao"].value;
+          var disponivel = formulario.elements["disponivel"].value;
+          if(disponivel == "Disponível"){
+                disponivel = "Disponível";
+              }
+              else if (disponivel == "Indisponível"){
+                disponivel = "Indisponível";
+              }
+              else{
+                throw new Error('Escreva Disponível ou Indisponível');
+                alert('Escreva Disponível ou Indisponível');
+              }
+
+           console.log("O nome é "+nome);
+            
+            // Crie um objeto com os dados do jogo
+            let data = {
+            nome: nome,
+            descricao: descricao, // adicionar a descricao
+            versao: versao, // adicionar a versao
+            disponivel: disponivel
+          };
+
+            
+            // Envie uma requisição put para a rota /jogo/1 com os dados do jogo
+              $.ajax({
+              url: "http://localhost:5000/atualizajogo",
+              method: "POST", // mudar para POST
+              contentType: "application/json",
+              data: JSON.stringify(data),
+              error: (error) => {
+                // Mostre uma mensagem de erro
+                alert(error.responseText);
+              },
+            });
+            
+        }
+
+        function deletar(id){
+          // Obtém o formulário pelo id
+          var formulario = document.getElementById(id);
+          // Obtém os campos pelo nome
+          var nome = formulario.elements["nome"].value;
+          // Use o método confirm() da janela para mostrar uma caixa de diálogo
+          var resultado = confirm("Deseja deletar "+nome+"?");
+
+          // Se o usuário clicar em OK, execute a lógica para deletar o item
+          if (resultado) {
+            // Lógica para deletar o item
+            console.log("Deletando "+nome);
+            let data = {
+            nome: nome,
+            };
+            $.ajax({
+              url: "http://localhost:5000/deletarjogo",
+              method: "POST", // mudar para POST
+              contentType: "application/json",
+              data: JSON.stringify(data),
+              success: (response) => {
+                // Mostre uma mensagem de sucesso
+                alert(response);
+                // Limpe os campos do formulário
+              },
+              error: (error) => {
+                // Mostre uma mensagem de erro
+                alert(error.responseText);
+              },
+            });
+          }
+
+
+        }
+
+      </script>
+      
+
+    </div>
+  </div>
+
+
+  <div class="parallax-container valign-wrapper">
+    <div class="section no-pad-bot">
+      <div class="container">
+        <div class="row center">
+        
+        </div>
+      </div>
+    </div>
+    <div class="parallax"><img src="static/background2.jpg" alt="Unsplashed background img 2"></div>
+  </div>
+
+  <div class="container">
+    <div class="section">
+
+      <div class="row">
+        <div class="col s12 center">
+          <h3><i class="mdi-content-send brown-text"></i></h3>
+          <h4>Planos e Contato</h4>
+          <p class="left-align light">Plano de $$ reais mensais por jogo</p>
+          <p class="left-align light">Whatsapp: +55 21 99552-6833</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <div class="parallax-container valign-wrapper">
+    <div class="section no-pad-bot">
+      <div class="container">
+        <div class="row center">
+        </div>
+      </div>
+    </div>
+    <div class="parallax"><img src="static/background3.jpg" alt="Unsplashed background img 3"></div>
+  </div>
+
+  <footer class="page-footer teal">
+    <div class="container">
+      <div class="row">
+        <div class="col l6 s12">
+          <h5 class="white-text">Gameflix</h5>
+          <p class="grey-text text-lighten-4">Somos um aluguel de jogos.</p>
+
+
+        </div>
+      
+      
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+      Made by <a class="brown-text text-lighten-3" href="http://materializecss.com">Henrique S. Rodrigues</a>
+      </div>
+    </div>
+  </footer>
+
+
+  <!--  Scripts-->
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="static/js/materialize.js"></script>
+  <script src="static/js/init.js"></script>
+
+  </body>
+</html>

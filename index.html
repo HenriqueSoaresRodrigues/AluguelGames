@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Gameflix</title>
+
+  <!-- CSS  -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="static/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="static/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+</head>
+<body>
+  <nav class="white" role="navigation">
+    <div class="nav-wrapper container">
+      <a id="logo-container" href="#" class="brand-logo">Gameflix</a>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="http://localhost:5000/loginadmin">Admin</a></li>
+      </ul>
+
+      <ul id="nav-mobile" class="sidenav">
+        <li><a href="http://localhost:5000/loginadmin">Admin</a></li>
+      </ul>
+      <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+    </div>
+  </nav>
+
+  <div id="index-banner" class="parallax-container">
+    <div class="section no-pad-bot">
+      <div class="container">
+        <br><br>
+        <h1 class="header center teal-text text-lighten-2">Gameflix</h1>
+        <div class="row center">
+          <h5 class="header col s12 light">Aluguel de videogames no PS4  e PS4</h5>
+        </div>
+        <div class="row center">
+        </div>
+        <br><br>
+
+      </div>
+    </div>
+    <div class="parallax"><img src="static/ps5games1.png" alt="Unsplashed background img 1"></div>
+  </div>
+
+
+  <div class="container">
+    <div class="section" id="section">
+      <script>
+        function criarDiv(imagem, nome, descricao, versao, disponivel) {
+          // criar um elemento div
+          var div = $("<div></div>");
+          // adicionar a classe card do Materialize
+          div.addClass("card");
+          // definir o estilo display como flex
+          div.attr("style", "display: flex; align-items: center");
+          // criar um elemento img
+          var img = $("<img>");
+          // definir o atributo src com a imagem
+          img.attr("src", imagem);
+          // definir o atributo width com 200
+          img.attr("width", 100);
+          // definir o atributo height com 400
+          img.attr("height", 200);
+          // criar uma div para a imagem
+          var imgDiv = $("<div></div>");
+          // adicionar a classe card-image do Materialize
+          imgDiv.addClass("card-image");
+          // anexar a imagem à div da imagem
+          imgDiv.append(img);
+          // criar um elemento span
+          var span1 = $("<span></span>");
+          var span2 = $("<span></span>");
+          var span3 = $("<span></span>");
+          var span4 = $("<span></span>");
+          // definir o texto com o nome
+          span1.text("Game: "+nome);
+          // adicionar a classe card-title do Materialize
+          span1.addClass("card-title");
+
+          span2.text("Descrição: "+descricao);
+          span3.text("Versão: "+versao);
+          if(disponivel == "Disponível"){
+            span4.text("Disponível");
+          }
+          else{
+            span4.text("Indisponível");
+          }
+          
+
+          // criar uma div para o nome
+          var nameDiv = $("<div></div>");
+          // adicionar a classe card-content do Materialize
+          nameDiv.addClass("card-content");
+          // anexar o span à div do nome
+          var br1 = $("<br>");
+          var br2 = $("<br>");
+          var br3 = $("<br>");
+          nameDiv.append(span1);
+          nameDiv.append(span2);
+          nameDiv.append(br1); // adicionar o br após o span2
+          nameDiv.append(span3);
+          nameDiv.append(br2); // adicionar o br após o span3
+          nameDiv.append(span4);
+          // anexar as divs filhas à div principal
+          div.append(imgDiv);
+          div.append(nameDiv);
+          // retornar a div criada
+          return div;
+        }
+
+        // função para ler o JSON e criar as divs
+        function lerJSON(url) {
+          // usar o método getJSON do jQuery
+          $.getJSON(url, function(data) {
+            // iterar sobre os dados recebidos
+            $.each(data, function(index, item) {
+              // extrair a imagem e o nome de cada item
+              var imagem = item.imagem;
+              var nome = item.nome;
+              var descricao = item.descricao;
+              var versao = item.versao;
+              var disponivel = item.disponivel;
+              console.log(nome);
+              // criar uma div com a imagem e o nome
+              var div = criarDiv(imagem, nome, descricao, versao, disponivel);
+              // anexar a div ao elemento com id #container
+              $("#section").append(div);
+            });
+          });
+        }
+        // chamar a função lerJSON com a url desejada
+        lerJSON("http://localhost:5000/lerjogos");
+
+      </script>
+      
+
+    </div>
+  </div>
+
+
+  <div class="parallax-container valign-wrapper">
+    <div class="section no-pad-bot">
+      <div class="container">
+        <div class="row center">
+        
+        </div>
+      </div>
+    </div>
+    <div class="parallax"><img src="static/background2.jpg" alt="Unsplashed background img 2"></div>
+  </div>
+
+  <div class="container">
+    <div class="section">
+
+      <div class="row">
+        <div class="col s12 center">
+          <h3><i class="mdi-content-send brown-text"></i></h3>
+          <h4>Planos e Contato</h4>
+          <p class="left-align light">Plano de $$ reais mensais por jogo</p>
+          <p class="left-align light">Whatsapp: +55 21 99552-6833</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <div class="parallax-container valign-wrapper">
+    <div class="section no-pad-bot">
+      <div class="container">
+        <div class="row center">
+        </div>
+      </div>
+    </div>
+    <div class="parallax"><img src="static/background3.jpg" alt="Unsplashed background img 3"></div>
+  </div>
+
+  <footer class="page-footer teal">
+    <div class="container">
+      <div class="row">
+        <div class="col l6 s12">
+          <h5 class="white-text">Gameflix</h5>
+          <p class="grey-text text-lighten-4">Somos um aluguel de jogos.</p>
+
+
+        </div>
+      
+      
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+      Made by <a class="brown-text text-lighten-3" href="http://materializecss.com">Henrique S. Rodrigues</a>
+      </div>
+    </div>
+  </footer>
+
+
+  <!--  Scripts-->
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="static/js/materialize.js"></script>
+  <script src="static/js/init.js"></script>
+
+  </body>
+</html>
